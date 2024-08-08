@@ -7,10 +7,6 @@ import { generateClientDropzoneAccept } from 'uploadthing/client'
 import { Button } from '@/components/ui/button'
 import { convertFileToUrl } from '@/lib/utils'
 
-type FileWithPath = File & {
-  path?: string
-}
-
 type FileUploaderProps = {
   onFieldChange: (url: string) => void
   imageUrl: string
@@ -18,14 +14,14 @@ type FileUploaderProps = {
 }
 
 export function FileUploader({ imageUrl, onFieldChange, setFiles }: FileUploaderProps) {
-  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles(acceptedFiles)
     onFieldChange(convertFileToUrl(acceptedFiles[0]))
   }, [onFieldChange, setFiles])
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: generateClientDropzoneAccept(['image/*']),
+    accept: 'image/*' ? generateClientDropzoneAccept(['image/*']) : undefined,
   })
 
   return (
